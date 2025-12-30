@@ -1,0 +1,105 @@
+---
+layout: default
+---
+
+<header class="header">
+  <img src="{{ '/assets/img/header-movies.png' | relative_url }}" alt="Movies">
+</header>
+
+<h2 class="section-title">5 Star Films</h2>
+<div class="slider" aria-label="5 Star Films slider">
+  {% assign five_star = site.reviews | where_exp: "r", "r.rating == 5 or r.rating == 5.0" | sort: "date" | reverse %}
+  {% for r in five_star %}
+    <article class="polaroid polaroid--slider" data-year="{{ r.year }}">
+      <div class="poster-frame">
+        <img class="poster" src="{{ r.poster | relative_url }}" alt="{{ r.title }} poster" loading="lazy">
+      </div>
+      <h3 class="movie-title">{{ r.title }}</h3>
+      <div class="stars" aria-label="Rating: {{ r.rating }} out of 5">
+        {% include stars.html rating=r.rating %}
+      </div>
+
+      <details class="review-toggle">
+        <summary>
+          <div class="review review-preview">{{ r.content | markdownify }}</div>
+          <span class="more-link">…more</span>
+        </summary>
+        <div class="review review-full">{{ r.content | markdownify }}</div>
+      </details>
+    </article>
+  {% endfor %}
+</div>
+
+<div class="year-tabs" aria-label="Year tabs">
+  <button class="year-tab year-tab--2024" type="button" data-year="2024">2024</button>
+  <button class="year-tab year-tab--2025" type="button" data-year="2025">2025</button>
+</div>
+
+<div class="grid-wrap">
+  <section id="yearGrid" class="grid is-hidden" aria-label="Movie reviews grid">
+    {% assign items = site.reviews | sort: "date" | reverse %}
+    {% for r in items %}
+      <article class="polaroid" data-year="{{ r.year }}">
+        <div class="poster-frame">
+          <img class="poster" src="{{ r.poster | relative_url }}" alt="{{ r.title }} poster" loading="lazy">
+        </div>
+        <h3 class="movie-title">{{ r.title }}</h3>
+        <div class="stars" aria-label="Rating: {{ r.rating }} out of 5">
+          {% include stars.html rating=r.rating %}
+        </div>
+
+        <details class="review-toggle">
+          <summary>
+            <div class="review review-preview">{{ r.content | markdownify }}</div>
+            <span class="more-link">…more</span>
+          </summary>
+          <div class="review review-full">{{ r.content | markdownify }}</div>
+        </details>
+      </article>
+    {% endfor %}
+  </section>
+</div>
+
+<script>
+(function(){
+  const grid = document.getElementById('yearGrid');
+  const tabs = Array.from(document.querySelectorAll('.year-tab'));
+  const allCards = Array.from(document.querySelectorAll('.polaroid'));
+
+  function applyYear(year){
+    grid.classList.remove('is-hidden');
+    tabs.forEach(t => t.classList.toggle('is-active', t.dataset.year === year));
+    allCards.forEach(card => {
+      const inSlider = card.classList.contains('polaroid--slider');
+      if (inSlider) return; // never hide 5-star slider cards
+      card.style.display = (card.dataset.year === year) ? '' : 'none';
+    });
+    grid.scrollIntoView({behavior: 'smooth', block: 'start'});
+  }
+
+  tabs.forEach(btn => btn.addEventListener('click', () => applyYear(btn.dataset.year)));
+
+  function hideMoreWhenNotNeeded(){
+    document.querySelectorAll('details.review-toggle').forEach(d => {
+      const preview = d.querySelector('.review-preview');
+      const more = d.querySelector('.more-link');
+      if (!preview || !more) return;
+
+      const fits = preview.scrollHeight <= preview.clientHeight + 1;
+      const summary = d.querySelector('summary');
+
+      if (fits){
+        more.style.display = 'none';
+        d.open = false;
+        if (summary) summary.style.cursor = 'default';
+      } else {
+        more.style.display = '';
+        if (summary) summary.style.cursor = 'pointer';
+      }
+    });
+  }
+
+  window.addEventListener('load', hideMoreWhenNotNeeded);
+  window.addEventListener('resize', hideMoreWhenNotNeeded);
+})();
+</script>

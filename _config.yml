@@ -1,0 +1,7 @@
+title: Movie Reviews
+# IMPORTANT: Set this to your repo name, e.g. "/Christmas-Movies"
+baseurl: "/REPO_NAME"
+
+collections:
+  reviews:
+    output: false
