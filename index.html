@@ -7,17 +7,31 @@ layout: default
 </header>
 
 <h2 class="section-title">5 Star Films</h2>
+
 <div class="slider" aria-label="5 Star Films slider">
-  {% assign five_star = site.reviews | where_exp: "r", "r.rating == 5 or r.rating == 5.0" | sort: "date" | reverse %}
+  {% assign five_star = site.reviews | where_exp: "r", "r.rating == 5" %}
   {% for r in five_star %}
     <article class="polaroid polaroid--slider" data-year="{{ r.year }}">
       <div class="poster-frame">
-        <img class="poster" src="{{ r.poster | relative_url }}" alt="{{ r.title }} poster" loading="lazy">
+        <img class="poster" src="{{ r.poster | relative_url }}" alt="{{ r.title }} poster">
       </div>
+
       <h3 class="movie-title">{{ r.title }}</h3>
+
       <div class="stars" aria-label="Rating: {{ r.rating }} out of 5">
         {% include stars.html rating=r.rating %}
       </div>
+
+      <details class="review-toggle">
+        <summary>
+          <span class="more-link">…more</span>
+        </summary>
+        <div class="review-full">{{ r.content | markdownify }}</div>
+      </details>
+    </article>
+  {% endfor %}
+</div>
+
 
       <details class="review-toggle">
         <summary>
