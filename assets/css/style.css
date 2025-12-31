@@ -5,24 +5,25 @@
 
   --year-2024: #ca3427;
   --year-2025: #395932;
-
-  --cream-text: #eeece0;
 }
 
+/* ===== Reset ===== */
 *{ box-sizing: border-box; }
 html, body{ margin:0; padding:0; }
 
+/* ===== Base ===== */
 body{
   background: var(--maroon);
-  font-family: "Oswald", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-family: "Oswald", system-ui, -apple-system, BlinkMacSystemFont,
+               "Segoe UI", Roboto, Arial, sans-serif;
   color: var(--text);
 }
 
-/* ===== Header (NOT sticky; scrolls normally) ===== */
+/* ===== Header (NOT sticky) ===== */
 .site-header{
   background: var(--cream);
-  padding: 12px 12px;
-  border-bottom: 1px solid rgba(0,0,0,0.08);
+  padding: 12px;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
 }
 
 .site-header__img{
@@ -30,186 +31,103 @@ body{
   width: 100%;
   max-width: 1200px;
   height: auto;
-  max-height: 33vh;      /* ~1/3 of screen height */
-  object-fit: contain;  /* prevents cropping */
+  max-height: 33vh;       /* ~1/3 of viewport */
+  object-fit: contain;
   margin: 0 auto;
+}
+
+@media (max-width: 480px){
+  .site-header__img{
+    max-height: 28vh;
+  }
 }
 
 /* ===== Section titles ===== */
 .section-title{
   max-width: 1200px;
-  margin: 18px auto 8px;
+  margin: 22px auto 10px;
   padding: 0 16px;
-  font-weight: 600;         /* Oswald bold */
+  font-weight: 600;
   font-size: 22px;
-  color: var(--cream-text); /* cream on maroon background */
+  color: var(--cream);
 }
 
-.section-title--spaced{
-  margin-top: 22px; /* extra space after header */
-}
-
-/* ===== 5-star slider ===== */
+/* ===== 5-Star Slider ===== */
 .slider{
   max-width: 1200px;
-  margin: 0 auto 18px;
-  padding: 6px 16px 14px;
+  margin: 0 auto 20px;
+  padding: 8px 16px 14px;
   display: flex;
-  gap: 14px;
+  gap: 12px;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   scroll-snap-type: x mandatory;
-  overscroll-behavior-x: contain;
 }
 
 .slider::-webkit-scrollbar{
-  height: 10px;
+  height: 8px;
 }
 .slider::-webkit-scrollbar-thumb{
   background: rgba(238,236,224,0.35);
-  border-radius: 10px;
+  border-radius: 8px;
 }
 
-/* Slider polaroids should match grid size */
-.polaroid--slider{
-  width: 100%;
-  max-width: 175px;   /* same as .polaroid */
-  padding: 12px;      /* same padding */
-  flex: 0 0 auto;     /* keep horizontal scrolling */
-
-}
-
-/* ===== Year tabs (stacked full-width bars) ===== */
-.year-tabs{
-  max-width: 1200px;
-  margin: 0 auto 10px;
-  padding: 0 16px 8px;
-}
-
-.year-tab{
-  width: 100%;
-  border: 0;
-  padding: 14px 16px;
-  margin: 10px 0 0;
-  font-family: "Oswald", sans-serif;
-  font-weight: 600;       /* bold */
-  font-size: 20px;
-  color: var(--cream-text);
-  text-align: center;
-  cursor: pointer;
-}
-
-.year-tab:focus{
-  outline: 2px solid rgba(238,236,224,0.6);
-  outline-offset: 2px;
-}
-
-.year-tab--2024{ background: var(--year-2024); }
-.year-tab--2025{ background: var(--year-2025); }
-
-.year-tab.is-active{
-  box-shadow: inset 0 0 0 3px rgba(238,236,224,0.55);
-}
-
-/* ===== Main grid ===== */
-.grid-wrap{
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 0 24px;
-}
-
-.grid{
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr)); /* iPhone: 2 across */
-  gap: 12px;
-  padding: 16px;
-  justify-items: center;
-  align-items: start;
-}
-
-/* very small phones: 1 across */
-@media (max-width: 360px){
-  .grid{ grid-template-columns: 1fr; }
-}
-
-/* tablet */
-@media (min-width: 768px){
-  .grid{
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 16px;
-  }
-}
-
-/* desktop */
-@media (min-width: 1024px){
-  .grid{ grid-template-columns: repeat(4, minmax(0, 1fr)); }
-}
-
-/* hidden until year is chosen */
-.is-hidden{ display: none; }
-
-/* ===== Polaroid card ===== */
+/* ===== Polaroid (shared size) ===== */
 .polaroid{
   background: var(--cream);
   padding: 12px;
-  width: 100%;
+  width: 175px;
   max-width: 175px;
-  border: 0;
 }
 
-/* same look inside slider, but let width be controlled by .polaroid--slider */
-.polaroid.polaroid--slider{
-  max-width: none;
+/* Slider polaroids MUST match grid exactly */
+.polaroid--slider{
+  width: 175px;
+  max-width: 175px;
   padding: 12px;
+  flex: 0 0 175px; /* prevents flex growth */
+  scroll-snap-align: start;
 }
 
+/* ===== Poster ===== */
 .poster-frame{
   background: var(--cream);
   padding: 8px;
 }
 
-/* poster with 2:3 ratio */
 .poster{
+  display: block;
   width: 100%;
-  height: auto;
   aspect-ratio: 2 / 3;
   object-fit: cover;
-  display: block;
 }
 
-/* ===== Text styles ===== */
+/* ===== Text ===== */
 .movie-title{
   margin: 10px 0 6px;
-  font-weight: 400; /* Oswald Regular 400 */
+  font-weight: 400; /* Oswald Regular */
   font-size: 16px;
   line-height: 1.2;
   color: var(--text);
 }
 
 .stars{
-  margin: 0 0 8px;
-  line-height: 1;
+  margin-bottom: 6px;
   font-size: 18px;
+  line-height: 1;
 }
 
 .star-filled{ color: #000; }
 .star-empty{ color: rgba(0,0,0,0.35); }
 
-/* Review text */
 .review{
-  font-weight: 300; /* Oswald Light 300 */
+  font-weight: 300; /* Oswald Light */
   font-size: 14px;
   line-height: 1.35;
   color: var(--text);
-  overflow-wrap: anywhere;
 }
 
-/* ===== “…more” expand/collapse ===== */
-.review-toggle{
-  margin-top: 6px;
-}
-
-/* Make the whole summary clickable but clean */
+/* ===== Expand / Collapse ===== */
 .review-toggle summary{
   list-style: none;
   cursor: pointer;
@@ -218,7 +136,6 @@ body{
   display: none;
 }
 
-/* Preview clamp (~3 lines) */
 .review-preview{
   display: -webkit-box;
   -webkit-box-orient: vertical;
@@ -226,20 +143,79 @@ body{
   overflow: hidden;
 }
 
-/* “...more” */
 .more-link{
   display: inline-block;
   margin-top: 6px;
-  font-weight: 600; /* bold */
-  font-size: 14px;
+  font-weight: 600;
   text-decoration: underline;
 }
 
-/* Hide “...more” when expanded */
 .review-toggle[open] .more-link{
   display: none;
 }
 
 .review-full{
   margin-top: 6px;
+}
+
+/* ===== Year Tabs ===== */
+.year-tabs{
+  max-width: 1200px;
+  margin: 0 auto 10px;
+  padding: 0 16px;
+}
+
+.year-tab{
+  width: 100%;
+  border: none;
+  padding: 14px;
+  margin-top: 10px;
+  font-weight: 600;
+  font-size: 20px;
+  color: var(--cream);
+  cursor: pointer;
+}
+
+.year-tab--2024{ background: var(--year-2024); }
+.year-tab--2025{ background: var(--year-2025); }
+
+.year-tab.is-active{
+  box-shadow: inset 0 0 0 3px rgba(238,236,224,0.6);
+}
+
+/* ===== Grid ===== */
+.grid-wrap{
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.grid{
+  display: grid;
+  grid-template-columns: repeat(2, 175px);
+  gap: 12px;
+  padding: 16px;
+  justify-content: center;
+}
+
+@media (max-width: 360px){
+  .grid{
+    grid-template-columns: 175px;
+  }
+}
+
+@media (min-width: 768px){
+  .grid{
+    grid-template-columns: repeat(3, 175px);
+    gap: 16px;
+  }
+}
+
+@media (min-width: 1024px){
+  .grid{
+    grid-template-columns: repeat(4, 175px);
+  }
+}
+
+.is-hidden{
+  display: none;
 }
