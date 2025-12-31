@@ -1,10 +1,12 @@
 {% assign rating_num = include.rating | plus: 0 %}
 {% assign full = rating_num | floor %}
 
-{% for i in (1..5) %}
-  {% if i <= full %}
-    <span class="star-filled" aria-hidden="true">★</span>
-  {% else %}
-    <span class="star-empty" aria-hidden="true">☆</span>
-  {% endif %}
-{% endfor %}
+ {% if include.rating == 0 %}
+  <span class="no-rating">No Rating</span>
+{% else %}
+  <!-- existing star rendering -->
+{% endif %}
+
+
+
+   
