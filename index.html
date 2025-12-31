@@ -26,19 +26,9 @@ layout: default
         <summary>
           <span class="more-link">…more</span>
         </summary>
-        <div class="review-full">{{ r.content | markdownify }}</div>
-      </details>
-    </article>
-  {% endfor %}
-</div>
-
-
-      <details class="review-toggle">
-        <summary>
-          <div class="review review-preview">{{ r.content | markdownify }}</div>
-          <span class="more-link">…more</span>
-        </summary>
-        <div class="review review-full">{{ r.content | markdownify }}</div>
+        <div class="review-full">
+          {{ r.content | markdownify }}
+        </div>
       </details>
     </article>
   {% endfor %}
@@ -55,65 +45,24 @@ layout: default
     {% for r in items %}
       <article class="polaroid" data-year="{{ r.year }}">
         <div class="poster-frame">
-          <img class="poster" src="{{ r.poster | relative_url }}" alt="{{ r.title }} poster" loading="lazy">
+          <img class="poster" src="{{ r.poster | relative_url }}" alt="{{ r.title }} poster">
         </div>
+
         <h3 class="movie-title">{{ r.title }}</h3>
+
         <div class="stars" aria-label="Rating: {{ r.rating }} out of 5">
           {% include stars.html rating=r.rating %}
         </div>
 
         <details class="review-toggle">
           <summary>
-            <div class="review review-preview">{{ r.content | markdownify }}</div>
             <span class="more-link">…more</span>
           </summary>
-          <div class="review review-full">{{ r.content | markdownify }}</div>
+          <div class="review-full">
+            {{ r.content | markdownify }}
+          </div>
         </details>
       </article>
     {% endfor %}
   </section>
 </div>
-
-<script>
-(function(){
-  const grid = document.getElementById('yearGrid');
-  const tabs = Array.from(document.querySelectorAll('.year-tab'));
-  const allCards = Array.from(document.querySelectorAll('.polaroid'));
-
-  function applyYear(year){
-    grid.classList.remove('is-hidden');
-    tabs.forEach(t => t.classList.toggle('is-active', t.dataset.year === year));
-    allCards.forEach(card => {
-      const inSlider = card.classList.contains('polaroid--slider');
-      if (inSlider) return; // never hide 5-star slider cards
-      card.style.display = (card.dataset.year === year) ? '' : 'none';
-    });
-    grid.scrollIntoView({behavior: 'smooth', block: 'start'});
-  }
-
-  tabs.forEach(btn => btn.addEventListener('click', () => applyYear(btn.dataset.year)));
-
-  function hideMoreWhenNotNeeded(){
-    document.querySelectorAll('details.review-toggle').forEach(d => {
-      const preview = d.querySelector('.review-preview');
-      const more = d.querySelector('.more-link');
-      if (!preview || !more) return;
-
-      const fits = preview.scrollHeight <= preview.clientHeight + 1;
-      const summary = d.querySelector('summary');
-
-      if (fits){
-        more.style.display = 'none';
-        d.open = false;
-        if (summary) summary.style.cursor = 'default';
-      } else {
-        more.style.display = '';
-        if (summary) summary.style.cursor = 'pointer';
-      }
-    });
-  }
-
-  window.addEventListener('load', hideMoreWhenNotNeeded);
-  window.addEventListener('resize', hideMoreWhenNotNeeded);
-})();
-</script>
