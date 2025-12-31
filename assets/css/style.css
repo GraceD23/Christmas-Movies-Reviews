@@ -70,11 +70,13 @@ body{
   border-radius: 10px;
 }
 
-/* slightly wider polaroids in slider */
+/* Slider polaroids should match grid size */
 .polaroid--slider{
-  flex: 0 0 auto;
-  width: 180px;
-  scroll-snap-align: start;
+  width: 100%;
+  max-width: 175px;   /* same as .polaroid */
+  padding: 12px;      /* same padding */
+  flex: 0 0 auto;     /* keep horizontal scrolling */
+
 }
 
 /* ===== Year tabs (stacked full-width bars) ===== */
