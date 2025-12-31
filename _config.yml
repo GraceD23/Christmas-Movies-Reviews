@@ -4,4 +4,4 @@ baseurl: "/Christmas-Movies-Reviews"
 
 collections:
   reviews:
-    output: false
+    output: true
