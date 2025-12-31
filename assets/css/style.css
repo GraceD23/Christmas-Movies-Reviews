@@ -1,119 +1,150 @@
 :root{
   --cream: #eeece0;
   --maroon: #350a0d;
+  --text: #000000;
+
   --year-2024: #ca3427;
   --year-2025: #395932;
-  --text: #000000;
+
+  --cream-text: #eeece0;
 }
 
 *{ box-sizing: border-box; }
 html, body{ margin:0; padding:0; }
+
 body{
   background: var(--maroon);
   font-family: "Oswald", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   color: var(--text);
 }
 
-/* Sticky header */
-.header{
-  position: sticky;
-  top: 0;
-  z-index: 50;
+/* ===== Header (NOT sticky; scrolls normally) ===== */
+.site-header{
   background: var(--cream);
   padding: 12px 12px;
   border-bottom: 1px solid rgba(0,0,0,0.08);
 }
-.header img{
-  display:block;
-  width:100%;
-  height:auto;
+
+.site-header__img{
+  display: block;
+  width: 100%;
+  height: auto;
   max-width: 1200px;
   margin: 0 auto;
 }
 
-/* Section titles */
+/* ===== Section titles ===== */
 .section-title{
   max-width: 1200px;
   margin: 18px auto 8px;
   padding: 0 16px;
-  font-weight: 600;
+  font-weight: 600;         /* Oswald bold */
   font-size: 22px;
-  color: var(--cream);
+  color: var(--cream-text); /* cream on maroon background */
 }
 
-/* 5-star slider */
+.section-title--spaced{
+  margin-top: 22px; /* extra space after header */
+}
+
+/* ===== 5-star slider ===== */
 .slider{
   max-width: 1200px;
   margin: 0 auto 18px;
   padding: 6px 16px 14px;
-  display:flex;
+  display: flex;
   gap: 14px;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   scroll-snap-type: x mandatory;
   overscroll-behavior-x: contain;
 }
-.slider::-webkit-scrollbar{ height: 10px; }
+
+.slider::-webkit-scrollbar{
+  height: 10px;
+}
 .slider::-webkit-scrollbar-thumb{
   background: rgba(238,236,224,0.35);
   border-radius: 10px;
 }
+
+/* slightly wider polaroids in slider */
 .polaroid--slider{
   flex: 0 0 auto;
   width: 180px;
   scroll-snap-align: start;
 }
 
-/* Year tabs (stacked full-width bars) */
+/* ===== Year tabs (stacked full-width bars) ===== */
 .year-tabs{
   max-width: 1200px;
   margin: 0 auto 10px;
   padding: 0 16px 8px;
 }
+
 .year-tab{
   width: 100%;
   border: 0;
   padding: 14px 16px;
   margin: 10px 0 0;
   font-family: "Oswald", sans-serif;
-  font-weight: 600;
+  font-weight: 600;       /* bold */
   font-size: 20px;
-  color: var(--cream);
+  color: var(--cream-text);
   text-align: center;
   cursor: pointer;
 }
-.year-tab:focus{ outline: 2px solid rgba(238,236,224,0.6); outline-offset: 2px; }
+
+.year-tab:focus{
+  outline: 2px solid rgba(238,236,224,0.6);
+  outline-offset: 2px;
+}
+
 .year-tab--2024{ background: var(--year-2024); }
 .year-tab--2025{ background: var(--year-2025); }
+
 .year-tab.is-active{
   box-shadow: inset 0 0 0 3px rgba(238,236,224,0.55);
 }
 
-/* Main grid */
+/* ===== Main grid ===== */
 .grid-wrap{
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 0 24px;
 }
+
 .grid{
-  display:grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr)); /* iPhone default: 2 across */
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr)); /* iPhone: 2 across */
   gap: 12px;
   padding: 16px;
   justify-items: center;
   align-items: start;
 }
+
+/* very small phones: 1 across */
 @media (max-width: 360px){
   .grid{ grid-template-columns: 1fr; }
 }
+
+/* tablet */
 @media (min-width: 768px){
-  .grid{ grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  .grid{
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+  }
 }
+
+/* desktop */
 @media (min-width: 1024px){
   .grid{ grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
 
-/* Polaroid card */
+/* hidden until year is chosen */
+.is-hidden{ display: none; }
+
+/* ===== Polaroid card ===== */
 .polaroid{
   background: var(--cream);
   padding: 12px;
@@ -121,58 +152,77 @@ body{
   max-width: 175px;
   border: 0;
 }
+
+/* same look inside slider, but let width be controlled by .polaroid--slider */
+.polaroid.polaroid--slider{
+  max-width: none;
+  padding: 12px;
+}
+
 .poster-frame{
   background: var(--cream);
   padding: 8px;
 }
+
+/* poster with 2:3 ratio */
 .poster{
   width: 100%;
   height: auto;
   aspect-ratio: 2 / 3;
   object-fit: cover;
-  display:block;
+  display: block;
 }
 
+/* ===== Text styles ===== */
 .movie-title{
   margin: 10px 0 6px;
-  font-weight: 400; /* Oswald regular */
+  font-weight: 400; /* Oswald Regular 400 */
   font-size: 16px;
   line-height: 1.2;
   color: var(--text);
 }
+
 .stars{
   margin: 0 0 8px;
   line-height: 1;
   font-size: 18px;
 }
+
 .star-filled{ color: #000; }
 .star-empty{ color: rgba(0,0,0,0.35); }
 
-/* Review + “…more” */
+/* Review text */
 .review{
-  font-weight: 300; /* Oswald light */
+  font-weight: 300; /* Oswald Light 300 */
   font-size: 14px;
   line-height: 1.35;
   color: var(--text);
   overflow-wrap: anywhere;
 }
 
+/* ===== “…more” expand/collapse ===== */
 .review-toggle{
   margin-top: 6px;
 }
+
+/* Make the whole summary clickable but clean */
 .review-toggle summary{
   list-style: none;
   cursor: pointer;
 }
-.review-toggle summary::-webkit-details-marker{ display: none; }
+.review-toggle summary::-webkit-details-marker{
+  display: none;
+}
 
+/* Preview clamp (~3 lines) */
 .review-preview{
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3; /* visually ~3 short sentences */
+  -webkit-line-clamp: 3;
   overflow: hidden;
 }
 
+/* “...more” */
 .more-link{
   display: inline-block;
   margin-top: 6px;
@@ -180,8 +230,12 @@ body{
   font-size: 14px;
   text-decoration: underline;
 }
-.review-toggle[open] .more-link{ display:none; }
-.review-full{ margin-top: 6px; }
 
-/* hidden by default until a year is selected */
-.is-hidden{ display:none; }
+/* Hide “...more” when expanded */
+.review-toggle[open] .more-link{
+  display: none;
+}
+
+.review-full{
+  margin-top: 6px;
+}
