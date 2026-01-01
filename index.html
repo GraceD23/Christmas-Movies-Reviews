@@ -2,20 +2,21 @@
 layout: default
 ---
 
-<header class="site-header">
-  <img class="site-header__img"
-       src="{{ 'assets/img/header-movies.png' | relative_url }}"
-       alt="Movie Review Header">
+<header class="header">
+  <img src="{{ 'assets/img/header-movies.png' | relative_url }}" alt="Movie Review Header">
 </header>
 
-<h2 class="section-title section-title--spaced">5 Star Films</h2>
+<h2 class="section-title">5 Star Films</h2>
 
 <div class="slider" aria-label="5 Star Films slider">
   {% assign five_star = site.reviews | where_exp: "r", "r.rating == 5" %}
   {% for r in five_star %}
     <article class="polaroid polaroid--slider" data-year="{{ r.year }}">
+
       <div class="poster-frame">
-        <img class="poster" src="{{ r.poster | relative_url }}" alt="{{ r.title }} poster">
+        <img class="poster"
+             src="{{ r.poster | relative_url }}"
+             alt="{{ r.title }} poster">
       </div>
 
       <h3 class="movie-title">{{ r.title }}</h3>
@@ -24,34 +25,48 @@ layout: default
         {% include stars.html rating=r.rating %}
       </div>
 
-      <details class="review-toggle">
-        <summary>
-          <div class="review review-preview">
-            {{ r.content | markdownify }}
-          </div>
-          <span class="more-link">…more</span>
-        </summary>
-
-        <div class="review review-full">
+      <div class="review-wrap">
+        <div class="review-text js-review">
           {{ r.content | markdownify }}
         </div>
-      </details>
+
+        <button class="more-btn js-more"
+                type="button"
+                aria-expanded="false">
+          …more
+        </button>
+      </div>
+
     </article>
   {% endfor %}
 </div>
 
 <div class="year-tabs" aria-label="Year tabs">
-  <button class="year-tab year-tab--2024" type="button" data-year="2024">2024</button>
-  <button class="year-tab year-tab--2025" type="button" data-year="2025">2025</button>
+  <button class="year-tab year-tab--2024"
+          type="button"
+          data-year="2024">
+    2024
+  </button>
+  <button class="year-tab year-tab--2025"
+          type="button"
+          data-year="2025">
+    2025
+  </button>
 </div>
 
 <div class="grid-wrap">
-  <section id="yearGrid" class="grid is-hidden" aria-label="Movie reviews grid">
+  <section id="yearGrid"
+           class="grid is-hidden"
+           aria-label="Movie reviews grid">
+
     {% assign items = site.reviews | sort: "date" | reverse %}
     {% for r in items %}
       <article class="polaroid" data-year="{{ r.year }}">
+
         <div class="poster-frame">
-          <img class="poster" src="{{ r.poster | relative_url }}" alt="{{ r.title }} poster">
+          <img class="poster"
+               src="{{ r.poster | relative_url }}"
+               alt="{{ r.title }} poster">
         </div>
 
         <h3 class="movie-title">{{ r.title }}</h3>
@@ -60,66 +75,64 @@ layout: default
           {% include stars.html rating=r.rating %}
         </div>
 
-        <details class="review-toggle">
-          <summary>
-            <div class="review review-preview">
-              {{ r.content | markdownify }}
-            </div>
-            <span class="more-link">…more</span>
-          </summary>
-
-          <div class="review review-full">
+        <div class="review-wrap">
+          <div class="review-text js-review">
             {{ r.content | markdownify }}
           </div>
-        </details>
+
+          <button class="more-btn js-more"
+                  type="button"
+                  aria-expanded="false">
+            …more
+          </button>
+        </div>
+
       </article>
     {% endfor %}
   </section>
 </div>
 
 <script>
-(function(){
-  const grid = document.getElementById('yearGrid');
-  const tabs = Array.from(document.querySelectorAll('.year-tab'));
-  const allCards = Array.from(document.querySelectorAll('.polaroid'));
+document.addEventListener("DOMContentLoaded", () => {
 
-  function applyYear(year){
-    grid.classList.remove('is-hidden');
-    tabs.forEach(t => t.classList.toggle('is-active', t.dataset.year === year));
+  /* MORE / LESS TOGGLE */
+  document.querySelectorAll(".polaroid").forEach(card => {
+    const text = card.querySelector(".js-review");
+    const btn  = card.querySelector(".js-more");
+    if (!text || !btn) return;
 
-    allCards.forEach(card => {
-      const inSlider = card.classList.contains('polaroid--slider');
-      if (inSlider) return; // keep 5-star slider visible
-      card.style.display = (card.dataset.year === year) ? '' : 'none';
-    });
-
-    grid.scrollIntoView({behavior: 'smooth', block: 'start'});
-  }
-
-  tabs.forEach(btn => btn.addEventListener('click', () => applyYear(btn.dataset.year)));
-
-  // Hide “…more” if preview isn't actually clamped (short reviews)
-  function hideMoreWhenNotNeeded(){
-    document.querySelectorAll('details.review-toggle').forEach(d => {
-      const preview = d.querySelector('.review-preview');
-      const more = d.querySelector('.more-link');
-      const summary = d.querySelector('summary');
-      if (!preview || !more || !summary) return;
-
-      const fits = preview.scrollHeight <= preview.clientHeight + 1;
-      if (fits){
-        more.style.display = 'none';
-        d.open = false;
-        summary.style.cursor = 'default';
-      } else {
-        more.style.display = '';
-        summary.style.cursor = 'pointer';
+    requestAnimationFrame(() => {
+      if (text.scrollHeight <= text.clientHeight + 2) {
+        btn.classList.add("is-hidden");
       }
     });
-  }
 
-  window.addEventListener('load', hideMoreWhenNotNeeded);
-  window.addEventListener('resize', hideMoreWhenNotNeeded);
-})();
+    btn.addEventListener("click", () => {
+      const expanded = text.classList.toggle("is-expanded");
+      btn.textContent = expanded ? "less" : "…more";
+      btn.setAttribute("aria-expanded", expanded);
+    });
+  });
+
+  /* YEAR FILTER */
+  const tabs = document.querySelectorAll(".year-tab");
+  const grid = document.getElementById("yearGrid");
+  const cards = grid.querySelectorAll(".polaroid");
+
+  tabs.forEach(tab => {
+    tab.addEventListener("click", () => {
+      const year = tab.dataset.year;
+      grid.classList.remove("is-hidden");
+
+      tabs.forEach(t => t.classList.remove("is-active"));
+      tab.classList.add("is-active");
+
+      cards.forEach(card => {
+        card.style.display =
+          card.dataset.year === year ? "block" : "none";
+      });
+    });
+  });
+
+});
 </script>
-
