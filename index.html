@@ -3,7 +3,8 @@ layout: default
 ---
 
 <header class="header">
-  <img src="{{ 'assets/img/header-movies.png' | relative_url }}" alt="Movie Review Header">
+  <img src="{{ 'assets/img/header-movies.png' | relative_url }}"
+       alt="Movie Review Header">
 </header>
 
 <h2 class="section-title">5 Star Films</h2>
@@ -21,7 +22,8 @@ layout: default
 
       <h3 class="movie-title">{{ r.title }}</h3>
 
-      <div class="stars" aria-label="Rating: {{ r.rating }} out of 5">
+      <!-- ⭐ STARS (5-star slider) -->
+      <div class="stars" aria-label="Rating {{ r.rating }} out of 5">
         {% include stars.html rating=r.rating %}
       </div>
 
@@ -71,7 +73,8 @@ layout: default
 
         <h3 class="movie-title">{{ r.title }}</h3>
 
-        <div class="stars" aria-label="Rating: {{ r.rating }} out of 5">
+        <!-- ⭐ STARS (year grid) -->
+        <div class="stars" aria-label="Rating {{ r.rating }} out of 5">
           {% include stars.html rating=r.rating %}
         </div>
 
