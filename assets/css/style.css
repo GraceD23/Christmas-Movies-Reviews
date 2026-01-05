@@ -5,16 +5,12 @@
   --year-2025: #395932;
   --text: #000000;
   --shadow: rgba(0,0,0,0.18);
-  --shadow-strong: rgba(0,0,0,0.28);
   --border: rgba(0,0,0,0.20);
 }
 
 /* ===== Reset ===== */
 *{ box-sizing: border-box; }
-html, body{
-  margin: 0;
-  padding: 0;
-}
+html, body{ margin:0; padding:0; }
 
 /* ===== Base ===== */
 body{
@@ -23,13 +19,12 @@ body{
   color: var(--text);
 }
 
-/* =========================================
-   HEADER (NOT STICKY, CREAM BACKGROUND)
-========================================= */
+/* =====================================
+   HEADER (NON-STICKY, CREAM BACKGROUND)
+===================================== */
 .header{
   width: 100%;
-  background: var(--cream); /* FIX: cream behind transparent PNG */
-  margin: 0;
+  background: var(--cream);
   padding: 12px 12px 16px;
   border-bottom: 1px solid rgba(0,0,0,0.12);
 }
@@ -39,55 +34,69 @@ body{
   width: 100%;
   max-width: 1200px;
   height: auto;
-  max-height: 33vh;        /* ~1/3 of screen */
+  max-height: 33vh;
   object-fit: contain;
   margin: 0 auto;
 }
 
 @media (max-width: 480px){
-  .header img{
-    max-height: 28vh;
-  }
+  .header img{ max-height: 28vh; }
 }
 
-/* =========================================
+/* =====================================
    SECTION TITLES
-========================================= */
+===================================== */
 .section-title{
   margin: 22px 16px 10px;
   color: var(--cream);
   font-size: 26px;
   font-weight: 600;
-  letter-spacing: 0.5px;
 }
 
-/* =========================================
-   5-STAR SLIDER
-========================================= */
+/* =====================================
+   POLAROID BASE SIZE (SINGLE SOURCE)
+===================================== */
+.polaroid{
+  background: var(--cream);
+  border-radius: 16px;
+  padding: 14px;
+  box-shadow: 0 12px 22px var(--shadow);
+  border: 1px solid var(--border);
+
+  width: 170px;        /* ← card size */
+  max-width: 170px;
+}
+
+/* =====================================
+   5-STAR SLIDER (EXACTLY 2 CARDS)
+===================================== */
 .slider{
   display: flex;
-  gap: 16px;
+  gap: 12px;
   padding: 10px 16px 18px;
   overflow-x: auto;
-  overflow-y: hidden;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
 }
 
-.slider::-webkit-scrollbar{
-  height: 10px;
-}
-.slider::-webkit-scrollbar-thumb{
-  background: rgba(255,255,255,0.18);
-  border-radius: 999px;
-}
-.slider::-webkit-scrollbar-track{
-  background: transparent;
+/* lock slider cards */
+.slider .polaroid{
+  flex: 0 0 calc((100vw - 16px*2 - 12px) / 2);
+  max-width: calc((100vw - 16px*2 - 12px) / 2);
+  scroll-snap-align: start;
 }
 
-/* =========================================
-   YEAR TABS (STACKED FULL WIDTH)
-========================================= */
+/* prevent oversizing on larger screens */
+@media (min-width: 600px){
+  .slider .polaroid{
+    flex: 0 0 170px;
+    max-width: 170px;
+  }
+}
+
+/* =====================================
+   YEAR TABS
+===================================== */
 .year-tabs{
   display: grid;
   grid-template-columns: 1fr;
@@ -99,131 +108,79 @@ body{
   width: 100%;
   border: none;
   border-radius: 14px;
-  padding: 16px 14px;
-  font-family: inherit;
+  padding: 16px;
   font-weight: 700;
   font-size: 20px;
-  letter-spacing: 0.6px;
   color: var(--cream);
   cursor: pointer;
-  box-shadow: 0 10px 18px var(--shadow);
-  transition: transform 0.08s ease,
-              box-shadow 0.12s ease,
-              filter 0.12s ease;
-}
-
-.year-tab:active{
-  transform: translateY(1px);
-  box-shadow: 0 8px 14px var(--shadow);
 }
 
 .year-tab--2024{ background: var(--year-2024); }
 .year-tab--2025{ background: var(--year-2025); }
 
 .year-tab.is-active{
-  filter: brightness(1.05);
-  box-shadow: 0 12px 22px var(--shadow-strong);
+  outline: 3px solid rgba(238,236,224,0.6);
 }
 
-/* =========================================
-   GRID
-========================================= */
-.grid-wrap{
-  padding: 0 16px 40px;
-}
+/* =====================================
+   GRID (2-ACROSS ON IPHONE)
+===================================== */
+.grid-wrap{ padding: 0 16px 40px; }
 
 .grid{
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: 16px;
-  align-items: start;
 }
 
-.grid.is-hidden{
-  display: none;
-}
+.grid.is-hidden{ display: none; }
 
-@media (max-width: 740px){
-  .grid{
-    grid-template-columns: 1fr;
-  }
-}
-
-/* Polaroid base size (used everywhere) */
-.polaroid{
-  background: var(--cream);
-  border-radius: 16px;
-  padding: 14px 14px 12px;
-  box-shadow: 0 12px 22px var(--shadow);
-  border: 1px solid var(--border);
-  width: 175px;          /* LOCKED size */
-  max-width: 175px;
-}
-
-/* Grid fills columns naturally */
 .grid .polaroid{
   width: 100%;
-  max-width: 175px;
+  max-width: 170px;
 }
 
-/* Slider polaroids must NOT grow */
-.slider .polaroid{
-  flex: 0 0 175px;       /* prevents flex expansion */
-  width: 175px;
-  max-width: 175px;
-  scroll-snap-align: start;
-}
-
-
-/* =========================================
+/* =====================================
    POSTER
-========================================= */
+===================================== */
 .poster-frame{
-  width: 100%;
+  background: #fff;
   border-radius: 12px;
   overflow: hidden;
-  background: #ffffff;
-  border: 1px solid rgba(0,0,0,0.10);
 }
 
 .poster{
   width: 100%;
-  height: auto;
-  display: block;
   aspect-ratio: 2 / 3;
   object-fit: cover;
+  display: block;
 }
 
-/* =========================================
+/* =====================================
    TEXT
-========================================= */
+===================================== */
 .movie-title{
-  margin: 10px 2px 6px;
-  font-size: 18px;
-  font-weight: 400; /* Oswald Regular */
-  color: #111;
+  margin: 10px 0 6px;
+  font-weight: 400;
+  font-size: 16px;
 }
 
 .stars{
-  margin: 0 2px 8px;
+  margin-bottom: 6px;
   line-height: 1;
 }
 
 .star-filled{ color: #000; }
 .star-empty{ color: rgba(0,0,0,0.35); }
 
-/* =========================================
+/* =====================================
    REVIEW + MORE / LESS
-========================================= */
-.review-wrap{
-  margin-top: 6px;
-}
+===================================== */
+.review-wrap{ margin-top: 6px; }
 
 .review-text{
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   font-size: 14px;
   line-height: 1.45;
-  color: #111;
 
   display: -webkit-box;
   -webkit-line-clamp: 3;
@@ -231,33 +188,23 @@ body{
   overflow: hidden;
 }
 
-.review-text p{
-  margin: 0;
-}
-
 .review-text.is-expanded{
   display: block;
   -webkit-line-clamp: unset;
-  overflow: visible;
 }
 
 .more-btn{
-  margin-top: 8px;
+  margin-top: 6px;
   border: none;
-  background: transparent;
-  color: #111;
-  font-family: inherit;
+  background: none;
   font-weight: 700;
   cursor: pointer;
-  padding: 0;
   text-decoration: underline;
 }
 
-.more-btn.is-hidden{
-  display: none;
-}
+.more-btn.is-hidden{ display: none; }
 
-/* =========================================
-   SMALL TWEAKS
-========================================= */
+/* =====================================
+   MISC
+===================================== */
 a{ color: inherit; }
