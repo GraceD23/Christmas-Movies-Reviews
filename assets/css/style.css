@@ -149,28 +149,31 @@ body{
   }
 }
 
-/* =========================================
-   POLAROID CARD (GRID + SLIDER SAME SIZE)
-========================================= */
+/* Polaroid base size (used everywhere) */
 .polaroid{
   background: var(--cream);
   border-radius: 16px;
   padding: 14px 14px 12px;
   box-shadow: 0 12px 22px var(--shadow);
   border: 1px solid var(--border);
-  width: 320px;
-  max-width: 100%;
+  width: 175px;          /* LOCKED size */
+  max-width: 175px;
 }
 
+/* Grid fills columns naturally */
 .grid .polaroid{
   width: 100%;
+  max-width: 175px;
 }
 
+/* Slider polaroids must NOT grow */
 .slider .polaroid{
-  flex: 0 0 auto;
-  width: 320px;
+  flex: 0 0 175px;       /* prevents flex expansion */
+  width: 175px;
+  max-width: 175px;
   scroll-snap-align: start;
 }
+
 
 /* =========================================
    POSTER
