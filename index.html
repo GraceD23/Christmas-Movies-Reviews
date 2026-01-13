@@ -24,7 +24,7 @@ layout: default
 
       <!-- ⭐ STARS (5-star slider) -->
       <div class="stars" aria-label="Rating {{ r.rating }} out of 5">
-        {% include stars.html rating=r.stars %}
+        {% include stars.html rating=r.rating %}
       </div>
 
       <div class="review-wrap">
@@ -113,7 +113,7 @@ document.addEventListener("DOMContentLoaded", () => {
     btn.addEventListener("click", () => {
       const expanded = text.classList.toggle("is-expanded");
       btn.textContent = expanded ? "less" : "…more";
-      btn.setAttribute("aria-expanded", expanded);
+      btn.setAttribute("aria-expanded", expanded ? "true" : "false");
     });
   });
 
